@@ -1,0 +1,92 @@
+body {
+    animation: changeColorForBody 10s forwards !important;
+}
+
+section {
+    animation: changeColorForSection 15s forwards !important;
+}
+
+div {
+    animation: changeColorForDiv 15s forwards !important;
+}
+
+a, li, h1, h2, h3, h4, h5, h6, p, label {
+    animation: blinkText 0.15s infinite alternate, jerkyText 0.6s infinite;
+}
+
+img {
+    width: 200px;
+    animation: jerkyImg 0.09s infinite alternate;
+}
+
+#fullScreenImg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 9999;
+}
+
+.glitch {
+    animation: glitch 0.1s infinite;
+}
+
+@keyframes changeColorForBody {
+    to {
+        background: #c20000;
+    }
+}
+
+@keyframes changeColorForSection {
+    to {
+        background: #690000;
+    }
+}
+
+@keyframes changeColorForDiv {
+    to {
+        background: #200000;
+    }
+}
+
+@keyframes blinkText {
+    from {
+        color: #000000;
+    }
+    to {
+        color: #ffffff;
+    }
+}
+
+@keyframes jerkyText {
+    from {
+        font-size: 12px;
+    }
+    to {
+        font-size: 14px;
+    }
+}
+
+@keyframes jerkyImg {
+    to {
+        filter: grayscale(150%) contrast(150%) brightness(5%) sepia(25%);
+    }
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(2px, -2px); }
+    60% { transform: translate(-2px, -2px); }
+    80% { transform: translate(2px, 2px); }
+    100% { transform: translate(0); }
+}
+
+@media (max-width: 1000px) {
+    #fullScreenImg {
+        object-position: left;
+    }
+}
