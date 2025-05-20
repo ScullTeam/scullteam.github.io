@@ -11,7 +11,7 @@
   </head>
   <body class="not-loaded">
     <!-- Rewrite by harvey -->
-    <p class="text">Проект NYM-OS завершён</p>
+    <p class="text">Проект NYM-OS завершён<br>Подпишись на наш канал<br><br>https://t.me/Skeleton_Realm</p>
     <div class="night"></div>
     <div class="flowers">
       <div class="flower flower--1">
@@ -310,6 +310,24 @@
       </div>
     </div>
 
+<audio id="bgMusic" loop>
+  <source src="End.mp3" type="audio/mpeg">
+  Ваш браузер не поддерживает аудио.
+</audio>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const audio = document.getElementById("bgMusic");
+    
+    audio.volume = 0.3;
+
+    audio.play().catch(() => {
+      document.body.addEventListener("click", () => {
+        audio.play();
+      }, { once: true });
+    });
+  });
+</script>
     <script src="End-flower.js"></script>
   </body>
 </html>
