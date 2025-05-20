@@ -378,12 +378,12 @@ body {
 }
 
 .skill-per.scss {
-  width: 95%;
+  width: 100%;
   animation-delay: 2.4s;
 }
 
 .skill-per.bootstrap {
-  width: 80%;
+  width: 97%;
   animation-delay: 2.5s;
 }
 
