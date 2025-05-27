@@ -1,0 +1,311 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #212121;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.neo-orwell-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.neo-orwell {
+  background-color: #DEDEDE;
+  border: 4px solid #6F0000;
+  border-radius: 20px;
+  box-shadow: 15px 15px 0 #404040;
+  width: 300px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.neo-orwell:hover {
+  transform: translate(-5px, -5px);
+  box-shadow: 20px 20px 0 #7C0000;
+}
+
+.neo-orwell::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  opacity: 0.05;
+  animation: neo-orwell-fog 20s linear infinite;
+  pointer-events: none;
+}
+
+.neo-orwell__eye {
+  width: 120px;
+  height: 70px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  border: 3px solid #000000;
+  position: relative;
+  margin: 0 auto 30px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2), 0 0 30px rgba(255, 255, 255, 0.1);
+  animation: neo-orwell-blink 6s infinite;
+}
+
+.neo-orwell__eye-inner {
+  width: 100px;
+  height: 100px;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+.neo-orwell__iris {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #1a1a1a 0%, #DB0000 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: neo-orwell-look-around 4s infinite;
+}
+
+.neo-orwell__pupil {
+  width: 25px;
+  height: 25px;
+  background: #000000;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.neo-orwell__eye::before,
+.neo-orwell__eye::after,
+.neo-orwell__eye-beam {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.neo-orwell__eye::before {
+  animation: neo-orwell-spotlight 4s infinite;
+}
+
+.neo-orwell__eye::after {
+  animation: neo-orwell-spotlight 4s infinite reverse;
+}
+
+.neo-orwell__eye-beam:nth-child(1) {
+  width: 250px;
+  height: 250px;
+  animation: neo-orwell-spotlight 5s infinite 0.5s;
+}
+
+.neo-orwell__eye-beam:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  animation: neo-orwell-spotlight 6s infinite 1s;
+}
+
+.neo-orwell__header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #4e2a10;
+  text-transform: uppercase;
+}
+
+.neo-orwell__message {
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: #4e2a10;
+}
+
+.neo-orwell__button {
+  display: inline-block;
+  padding: 15px 30px;
+  margin: 0 10px 20px;
+  font-size: 18px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.neo-orwell__button--primary {
+  background-color: #138B16;
+  color: #ffffff;
+}
+
+.neo-orwell__button--primary:hover {
+  background-color: #4e2a10;
+  transform: scale(1.05);
+}
+
+.neo-orwell__button--secondary {
+  background-color: #aa0f0f;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.neo-orwell__button--secondary .button-text,
+.neo-orwell__button--secondary .button-text-hover {
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.neo-orwell__button--secondary .button-text-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.neo-orwell__button--secondary:hover .button-text {
+  opacity: 0;
+  transform: scale(1.5);
+}
+
+.neo-orwell__button--secondary:hover .button-text-hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.neo-orwell__button--secondary:hover {
+  background-color: #ee2020;
+  animation: neo-orwell-glitch 0.3s infinite;
+}
+
+.neo-orwell__footer {
+  font-size: 14px;
+  color: #8E0404;
+  border-top: 2px solid #D21E1E;
+  padding-top: 20px;
+}
+
+@keyframes neo-orwell-blink {
+  0%,
+  95%,
+  100% {
+    height: 70px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+  }
+  97% {
+    height: 70px;
+    border-top-width: 35px;
+    border-bottom-width: 35px;
+  }
+}
+
+@keyframes neo-orwell-look-around {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+  25% {
+    transform: translate(-70%, -50%);
+  }
+  50% {
+    transform: translate(-30%, -50%);
+  }
+  75% {
+    transform: translate(-70%, -50%);
+  }
+}
+
+@keyframes neo-orwell-spotlight {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-70%, -50%) scale(1.2);
+    opacity: 0.5;
+  }
+}
+
+@keyframes neo-orwell-fog {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(100%, 100%);
+  }
+}
+
+@keyframes neo-orwell-glitch {
+  0% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+  20% {
+    transform: translate(-5px, 5px);
+    text-shadow: 2px 2px #ff0000;
+  }
+  40% {
+    transform: translate(-5px, -5px);
+    text-shadow: -2px -2px #00ff00;
+  }
+  60% {
+    transform: translate(5px, 5px);
+    text-shadow: 2px -2px #0000ff;
+  }
+  80% {
+    transform: translate(5px, -5px);
+    text-shadow: -2px 2px #ffff00;
+  }
+  100% {
+    transform: translate(0);
+    text-shadow: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .neo-orwell {
+    width: 80%;
+    padding: 20px;
+  }
+}

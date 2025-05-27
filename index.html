@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>SPY</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="neo-orwell">
+  <div class="neo-orwell__eye">
+    <div class="neo-orwell__eye-inner">
+      <div class="neo-orwell__iris">
+        <div class="neo-orwell__pupil"></div>
+      </div>
+    </div>
+  </div>
+  <div class="neo-orwell__header">NYM-OS IS WATCHING YOU</div>
+  <div class="neo-orwell__message">
+    Your data will be forwarded to ScullTeam. Do you agree?
+  </div>
+  <div class="neo-orwell__actions">
+    <button id="conform-btn" class="neo-orwell__button neo-orwell__button--primary">
+      Yes / Да
+    </button>    
+    <button id="resist-btn" class="neo-orwell__button neo-orwell__button--secondary">
+      <span class="button-text">No / Нет</span>
+      <span class="button-text-hover">ARE YOU SURE?</span>
+    </button>
+    
+  </div>
+  <div class="neo-orwell__footer">• MADE • BY • SCULLTEAM •</div>
+</div>
+
+<script>
+  document.getElementById('conform-btn').addEventListener('click', function () {
+    window.location.href = 'main.html';
+  });
+  document.getElementById('resist-btn').addEventListener('click', function () {
+    setTimeout(function () {
+      window.location.href = 'config/eye/index.html';
+    }, 3000);
+  });
+</script>
+</body>
+</html>
