@@ -12,18 +12,19 @@
   const messages = ['XSS', 'HACKED', 'ALERT', 'PWNED', 'DANGER', 'SECURITY', 'BREACH', 'EXPLOIT', 'ACCESS', 'GRANTED'];
   const colors = ['lime', 'red', 'cyan', 'yellow', 'magenta', 'orange', 'white', '#0ff', '#f0f', '#0f0'];
 
-  // Ширина экрана для расчёта позиций
+  // Ширина экрана
   const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  const laneCount = 10;                         // количество дорожек
+  const laneWidth = screenWidth / laneCount;    // ширина каждой дорожки
 
   // Создаём 10 элементов
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < laneCount; i++) {
     const el = document.createElement('div');
     el.textContent = messages[i % messages.length];
     el.style.cssText = `
       color: ${colors[i % colors.length]};
       font: bold 24px Arial, sans-serif;
       position: absolute;
-      left: ${20 + (i * (screenWidth / 10))}px;
       top: -60px;
       margin: 0;
       text-shadow: 0 0 8px currentColor;
@@ -32,9 +33,13 @@
     `;
     container.appendChild(el);
 
+    // Центрируем по дорожке
+    const textWidth = el.offsetWidth || 80;
+    el.style.left = (i * laneWidth + (laneWidth - textWidth) / 2) + 'px';
+
     // Начальная позиция и скорость
     let y = -60;
-    const speed = 3 + Math.random() * 2; // от 3 до 5 пикс/кадр — выше средней
+    const speed = 3 + Math.random() * 2; // 3–5 пикс/кадр
 
     // Движение сверху вниз
     setInterval(() => {
@@ -42,10 +47,12 @@
       el.style.top = y + 'px';
       if (y > (window.innerHeight || 700) + 100) {
         y = -60;
-        // Случайный сдвиг по горизонтали при перезапуске (опционально)
-        // el.style.left = Math.random() * (screenWidth - 100) + 'px';
+
+        // случайный сдвиг внутри дорожки
+        const tw = el.offsetWidth || 80;
+        el.style.left = (i * laneWidth + Math.random() * (laneWidth - tw)) + 'px';
       }
-    }, 40); // ~25 кадров/сек
+    }, 40);
 
     // Мигание цветами
     setInterval(() => {
