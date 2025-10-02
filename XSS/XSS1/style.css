@@ -1,0 +1,37 @@
+html,body{
+  height:100%;
+  margin:0;
+  background:#000;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow:hidden;
+  color:#fff;
+}
+
+.floating{
+  position:absolute;
+  top:-12%;
+  left:50%;
+  transform:translateX(-50%) translateY(0);
+  white-space:nowrap;
+  font-weight:800;
+  text-shadow:0 0 12px rgba(0,0,0,.6);
+  will-change:transform,opacity,color;
+  animation-name:drop,blink;
+  animation-timing-function:linear,ease-in-out;
+  animation-iteration-count:infinite,infinite;
+}
+
+@keyframes drop{
+  0%{transform:translateX(-50%) translateY(-22vh);opacity:0}
+  8%{opacity:1}
+  100%{transform:translateX(-50%) translateY(115vh);opacity:0}
+}
+
+@keyframes blink{
+  0%,100%{opacity:1;filter:brightness(1)}
+  50%{opacity:.3;filter:brightness(1.1)}
+}
+
+.small{font-size:18px}
+.medium{font-size:28px}
+.large{font-size:40px}
