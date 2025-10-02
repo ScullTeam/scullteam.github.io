@@ -1,80 +1,75 @@
 (function(){
-  document.body.innerHTML='';
-  document.body.style.background='black';
-  const container=document.createElement('div');
-  container.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;overflow:hidden;pointer-events:none';
-  document.body.appendChild(container);
-  const messages=['XSS','HACKED','ALERT','PWNED','DANGER','SECURITY','BREACH','EXPLOIT','ACCESS','GRANTED'];
-  const colors=['lime','red','cyan','yellow','magenta','orange','white','#0ff','#f0f','#0f0'];
-  const screenWidth=window.innerWidth;
-  const screenHeight=window.innerHeight;
-  const textSize=20;
-  const cellWidth=110;
-  const cellHeight=36;
-  const baseCols=Math.max(1,Math.floor(screenWidth/cellWidth));
-  const baseRows=Math.max(1,Math.floor(screenHeight/cellHeight));
-  const verticalMultiplier=50;
-  const cols=baseCols;
-  const rows=baseRows*verticalMultiplier;
-  const virtualHeight=rows*cellHeight;
-  const displayHeight=baseRows*cellHeight;
-  const cells=new Array(cols*rows);
-  let ci=0;
-  for(let r=0;r<rows;r++){
-    for(let c=0;c<cols;c++){
-      cells[ci++]={x:c*cellWidth,y:r*cellHeight};
+  const dpr = window.devicePixelRatio || 1;
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;pointer-events:none';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  function resize(){
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    width = w;
+    height = h;
+    setupGrid();
+  }
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  const words = ['XSS','HACKED','ALERT','PWNED','DANGER','SECURITY','BREACH','EXPLOIT','ACCESS','GRANTED'];
+  const palette = ['lime','red','cyan','yellow','magenta','orange','white','#0ff','#f0f','#0f0'];
+  const fontSize = 14;
+  const cellW = 90;
+  const cellH = 28;
+  const verticalMultiplier = 6;
+  let cols = Math.max(1,Math.floor(width/cellW));
+  let baseRows = Math.max(1,Math.floor(height/cellH));
+  let rows = baseRows * verticalMultiplier;
+  let virtualH = rows * cellH;
+  let cells = [];
+  let items = [];
+  function setupGrid(){
+    cols = Math.max(1,Math.floor(width/cellW));
+    baseRows = Math.max(1,Math.floor(height/cellH));
+    rows = baseRows * verticalMultiplier;
+    virtualH = rows * cellH;
+    cells = [];
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        cells.push({x:c*cellW,y:r*cellH});
+      }
+    }
+    items = [];
+    const total = cells.length;
+    for(let i=0;i<total;i++){
+      const cell = cells[i];
+      const text = words[i % words.length];
+      const color = palette[Math.floor(Math.random()*palette.length)];
+      const left = cell.x + 4 + Math.floor(Math.random()*(Math.max(1,cellW-8- (text.length*fontSize*0.55))));
+      const top = cell.y - Math.floor(Math.random()*baseRows*cellH);
+      const speed = 0.2 + Math.random()*1.8;
+      items.push({text,color,left, y:top, speed});
     }
   }
-  function pickCell(){
-    if(cells.length===0) return null;
-    const idx=Math.floor(Math.random()*cells.length);
-    const cell=cells[idx];
-    const last=cells[cells.length-1];
-    cells[idx]=last;
-    cells.pop();
-    return cell;
-  }
-  const desiredCount=2000;
-  const total=Math.min(desiredCount,cols*rows);
-  const elements=[];
-  for(let i=0;i<total;i++){
-    const el=document.createElement('div');
-    el.textContent=messages[i%messages.length];
-    el.style.cssText=`position:absolute;font:bold ${textSize}px Arial, sans-serif;margin:0;white-space:nowrap;text-shadow:0 0 6px currentColor;opacity:0.95;pointer-events:none;`;
-    el.style.color=colors[i%colors.length];
-    const cell=pickCell();
-    if(!cell) break;
-    container.appendChild(el);
-    const tw=el.offsetWidth||Math.max(8,cellWidth-8);
-    const maxLeftOffset=Math.max(0,cellWidth-tw);
-    const left=cell.x+Math.floor(Math.random()*(maxLeftOffset+1));
-    const top=cell.y-Math.floor(Math.random()*baseRows*cellHeight);
-    el.style.left=left+'px';
-    el.dataset.y=String(top);
-    el.style.top=top+'px';
-    const speed=0.5+Math.random()*2.5;
-    elements.push({el,speed});
-  }
-  let lastTime=performance.now();
-  function animate(now){
-    const dt=(now-lastTime)/16.6667;
-    lastTime=now;
-    for(let i=0;i<elements.length;i++){
-      const obj=elements[i];
-      let y=parseFloat(obj.el.dataset.y);
-      y+=obj.speed*dt;
-      if(y>virtualHeight) y-=virtualHeight;
-      obj.el.dataset.y=String(y);
-      const visibleY=((y%displayHeight)+displayHeight)%displayHeight;
-      obj.el.style.top=visibleY+'px';
+  resize();
+  window.addEventListener('resize',()=>{ resize(); });
+  ctx.font = 'bold '+fontSize+'px Arial, sans-serif';
+  ctx.textBaseline = 'top';
+  function frame(now){
+    ctx.clearRect(0,0,width,height);
+    for(let i=0;i<items.length;i++){
+      const it = items[i];
+      it.y += it.speed;
+      if(it.y > virtualH) it.y -= virtualH;
+      const visibleY = ((it.y % (baseRows*cellH)) + (baseRows*cellH)) % (baseRows*cellH);
+      const alpha = 1;
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = it.color;
+      ctx.fillText(it.text, it.left, visibleY);
     }
-    requestAnimationFrame(animate);
+    requestAnimationFrame(frame);
   }
-  requestAnimationFrame(animate);
-  setInterval(()=>{
-    for(let i=0;i<elements.length;i++){
-      const obj=elements[i];
-      obj.el.style.color=colors[Math.floor(Math.random()*colors.length)];
-    }
-  },120+Math.floor(Math.random()*200));
+  requestAnimationFrame(frame);
 })();
