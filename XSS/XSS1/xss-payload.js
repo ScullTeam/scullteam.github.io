@@ -1,75 +1,72 @@
 (function(){
+  const desiredCount = 500;
   const dpr = window.devicePixelRatio || 1;
   const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;pointer-events:none';
+  canvas.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:999999;pointer-events:none;background:black';
   document.body.appendChild(canvas);
   const ctx = canvas.getContext('2d');
+  let w = window.innerWidth;
+  let h = window.innerHeight;
+
   function resize(){
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    w = window.innerWidth;
+    h = window.innerHeight;
     canvas.width = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
     canvas.style.width = w + 'px';
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    width = w;
-    height = h;
-    setupGrid();
+    layout();
   }
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  const words = ['XSS','HACKED','ALERT','PWNED','DANGER','SECURITY','BREACH','EXPLOIT','ACCESS','GRANTED'];
+
+  window.addEventListener('resize', resize);
+
+  const words = new Array(desiredCount).fill('HACKED');
   const palette = ['lime','red','cyan','yellow','magenta','orange','white','#0ff','#f0f','#0f0'];
-  const fontSize = 14;
-  const cellW = 90;
-  const cellH = 28;
-  const verticalMultiplier = 6;
-  let cols = Math.max(1,Math.floor(width/cellW));
-  let baseRows = Math.max(1,Math.floor(height/cellH));
-  let rows = baseRows * verticalMultiplier;
-  let virtualH = rows * cellH;
-  let cells = [];
   let items = [];
-  function setupGrid(){
-    cols = Math.max(1,Math.floor(width/cellW));
-    baseRows = Math.max(1,Math.floor(height/cellH));
-    rows = baseRows * verticalMultiplier;
-    virtualH = rows * cellH;
-    cells = [];
-    for(let r=0;r<rows;r++){
-      for(let c=0;c<cols;c++){
-        cells.push({x:c*cellW,y:r*cellH});
+  let fontSize = 14;
+
+  function layout(){
+    items = [];
+    const aspect = w / h;
+    const cols = Math.max(1, Math.ceil(Math.sqrt(desiredCount * aspect)));
+    const rows = Math.ceil(desiredCount / cols);
+    const cellW = Math.floor(w / cols);
+    const cellH = Math.floor(h / rows);
+    fontSize = Math.max(10, Math.min(cellH - 4, 24));
+    ctx.font = 'bold '+fontSize+'px Arial, sans-serif';
+    ctx.textBaseline = 'top';
+    let idx = 0;
+    for(let r=0;r<rows && idx<desiredCount;r++){
+      for(let c=0;c<cols && idx<desiredCount;c++){
+        const text = words[idx];
+        const tw = ctx.measureText(text).width;
+        const maxXpad = Math.max(0, cellW - tw);
+        const left = c*cellW + (maxXpad>0 ? Math.floor(Math.random()*maxXpad) : 0);
+        const maxYpad = Math.max(0, cellH - fontSize);
+        const top = r*cellH + (maxYpad>0 ? Math.floor(Math.random()*maxYpad) : 0);
+        const color = palette[Math.floor(Math.random()*palette.length)];
+        items.push({text,left,top,color});
+        idx++;
       }
     }
-    items = [];
-    const total = cells.length;
-    for(let i=0;i<total;i++){
-      const cell = cells[i];
-      const text = words[i % words.length];
-      const color = palette[Math.floor(Math.random()*palette.length)];
-      const left = cell.x + 4 + Math.floor(Math.random()*(Math.max(1,cellW-8- (text.length*fontSize*0.55))));
-      const top = cell.y - Math.floor(Math.random()*baseRows*cellH);
-      const speed = 0.2 + Math.random()*1.8;
-      items.push({text,color,left, y:top, speed});
-    }
   }
+
   resize();
-  window.addEventListener('resize',()=>{ resize(); });
-  ctx.font = 'bold '+fontSize+'px Arial, sans-serif';
-  ctx.textBaseline = 'top';
-  function frame(now){
-    ctx.clearRect(0,0,width,height);
+
+  function frame(){
+    ctx.fillStyle='black';
+    ctx.fillRect(0,0,w,h);
     for(let i=0;i<items.length;i++){
       const it = items[i];
-      it.y += it.speed;
-      if(it.y > virtualH) it.y -= virtualH;
-      const visibleY = ((it.y % (baseRows*cellH)) + (baseRows*cellH)) % (baseRows*cellH);
-      const alpha = 1;
-      ctx.globalAlpha = alpha;
       ctx.fillStyle = it.color;
-      ctx.fillText(it.text, it.left, visibleY);
+      ctx.fillText(it.text, it.left, it.top);
+    }
+    for(let i=0;i<items.length;i++){
+      items[i].color = palette[Math.floor(Math.random()*palette.length)];
     }
     requestAnimationFrame(frame);
   }
+
   requestAnimationFrame(frame);
 })();
